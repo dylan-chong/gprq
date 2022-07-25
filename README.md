@@ -1,6 +1,6 @@
 # gprq
 
-`gprq` "Git Pull Request Quick" allows you to commit and create PRs in a single command!
+`gprq` "Git Pull Request Quick" -- commit, branch and create a PR in a single command!
 
 Basically, run `gprq`, and you've magically:
 
@@ -88,7 +88,8 @@ Then do one of the following
 
 1. Use branch/commit name of JIRA ticket - My favourite option!
     - Drag-select the `JIRA-123 Fix the thing from the
-   website` from your JIRA ticket ![JIRA ticket](./docs/jira_screensot.png)
+   website` from your JIRA ticket ![JIRA ticket](./docs/jira_screenshot.png)
+        - Tip: It's easiest if drag-select from the right of the title up/left
     - Copy it to your clipboard
     - Run `gcmq`
     - Profit! (yea, lol, it works :shrug:)

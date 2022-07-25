@@ -5,6 +5,7 @@ function main() {
     git status
     echo
 
+    # TODO tidy
     read -p "Are you on the right base commit *and* does this show the right staged files [y/n]? " CONT
     echo
     if [ "$CONT" = "y" ]; then
@@ -22,12 +23,9 @@ function main() {
                 # If contains a slash
                 if [[ "$1" =~ / ]]; then
                     local prefix=`echo $branch | perl -pe 's/\/.*//'`
-                    # Uppercase first letter of prefix
-                    local prefix_formatted=`echo "$prefix" | perl -pe 's/^(\w)/\U$1/'`
+                    local prefix_formatted="$prefix"
                     local separator=': '
                     local suffix=${branch#"$prefix"/}
-                    echo "prefix: $prefix"
-                    echo "suffix: $suffix"
                 else
                     local prefix_formatted=''
                     local separator=''
@@ -37,8 +35,7 @@ function main() {
                 # Pass branch suffix as argument and convert to commit messagee
                 # 1. Replace all - and _ with spaces
                 # 2. Replace 2+ spaces with ' - ' so you can use '--' in the branch name represent an actual dash
-                # 3. Uppercase the first letter
-                local suffix_formatted=`echo "$suffix" | perl -pe 's/_|-/ /g' | perl -pe 's/\s\s+/ - /g' | perl -pe 's/^(\w)/\U$1/'`
+                local suffix_formatted=`echo "$suffix" | perl -pe 's/_|-/ /g' | perl -pe 's/\s\s+/ - /g'`
 
                 local message="$prefix_formatted$separator$suffix_formatted"
             else
@@ -81,7 +78,16 @@ function gpr() {
 
     # MacOS specific
     # TODO detect platform
-    open $url
+    open "$url"
+}
+
+function commit_message_to_branch() {
+    # TODO refactor, SOLV
+    perl -pe 's/(:|\/)//g' \
+        | perl -pe 's/^(SOLV-\d+(?=:)?|[^:]+(?=:)):?\s*(.*\S)\s*$/\1\/\l\2/' \
+        | perl -pe 's/[^\w\/]+/-/g' \
+        | tr '[:upper:]' '[:lower:]' \
+        | perl -pe 's/^solv/SOLV/'
 }
 
 main $@

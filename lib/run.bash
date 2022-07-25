@@ -55,7 +55,7 @@ function main() {
             git checkout -b "$branch" \
                 && git commit -m "$message" \
                 && git push -u origin "$branch" \
-                && gpr
+                && open_pull_request_in_browser
         else
             echo "Cancelling";
         fi
@@ -64,7 +64,7 @@ function main() {
     fi
 }
 
-function gpr() {
+function open_pull_request_in_browser() {
     # Goes to the URL for creating a new pull request in the browser. For
     # GitHub, the branch is selected automatically, and if the pull request
     # already exists for that branch, GitHub will redirect to the existing pull
@@ -81,8 +81,12 @@ function gpr() {
     open "$url"
 }
 
+function current_branch() {
+    git branch | awk '/^\* / { print $2 }'
+}
+
 function commit_message_to_branch() {
-    # TODO refactor, SOLV
+    # TODO refactor and fix bugs, SOLV
     perl -pe 's/(:|\/)//g' \
         | perl -pe 's/^(SOLV-\d+(?=:)?|[^:]+(?=:)):?\s*(.*\S)\s*$/\1\/\l\2/' \
         | perl -pe 's/[^\w\/]+/-/g' \

@@ -55,7 +55,7 @@ function main() {
             git checkout -b "$branch" \
                 && git commit -m "$message" \
                 && git push -u origin "$branch" \
-                && gpr
+                && open_pull_request_in_browser
         else
             echo "Cancelling";
         fi
@@ -64,7 +64,7 @@ function main() {
     fi
 }
 
-function gpr() {
+function open_pull_request_in_browser() {
     # Goes to the URL for creating a new pull request in the browser. For
     # GitHub, the branch is selected automatically, and if the pull request
     # already exists for that branch, GitHub will redirect to the existing pull
@@ -73,7 +73,7 @@ function gpr() {
     if [[ $base == 'https://bitbucket.org'* ]]; then
         local url="$base/pull-requests/new"
     else
-        local url="$base/pull/`current_branch`"
+        local url="$base/pull/`git branch`"
     fi
 
     # MacOS specific

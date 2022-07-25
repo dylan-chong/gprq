@@ -73,7 +73,7 @@ function open_pull_request_in_browser() {
     if [[ $base == 'https://bitbucket.org'* ]]; then
         local url="$base/pull-requests/new"
     else
-        local url="$base/pull/`git branch`"
+        local url="$base/pull/`current_branch`"
     fi
 
     # MacOS specific
@@ -81,8 +81,12 @@ function open_pull_request_in_browser() {
     open "$url"
 }
 
+function current_branch() {
+    git branch | awk '/^\* / { print $2 }'
+}
+
 function commit_message_to_branch() {
-    # TODO refactor, SOLV
+    # TODO refactor and fix bugs, SOLV
     perl -pe 's/(:|\/)//g' \
         | perl -pe 's/^(SOLV-\d+(?=:)?|[^:]+(?=:)):?\s*(.*\S)\s*$/\1\/\l\2/' \
         | perl -pe 's/[^\w\/]+/-/g' \

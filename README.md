@@ -5,7 +5,7 @@
 Basically, run `gprq`. You've magically:
 
 1. created new a branch
-1. commited
+1. committed
 1. pushed the branch to `origin`
 1. opened the URL to create a Pull Request in the browser.
     - (If the PR already exists, GitHub will redirect you to the existing PR)
@@ -15,7 +15,7 @@ purpose, so they are easy for people to code review).
 
 # Installation
 
-### Bash
+## Bash
 
 ```
 installation_dir=~ # Feel free to customise this
@@ -25,13 +25,20 @@ git clone git@github.com:dylan-chong/gprq.git
 echo "source $installation_dir/gprq.bash" >> ~/.bashrc
 ```
 
-### ZSH
+## ZSH
 
 Use a plugin manager, e.g. Zplug:
 
 ```zsh
 zplug dylan-chong/gprq, from:github
 ```
+
+# Compatibility
+
+Currently works only with MacOS (pasting from clipboard and opening the URL in the browser will only work on Mac).
+Works with GitHub and Bitbucket.
+
+PRs welcome!
 
 # Usage
 
@@ -74,10 +81,3 @@ Then do one of the following
 1. Never checkout the main/master branch. Always `git fetch && git checkout origin/HEAD`.
    That way you can never need to worry about pulling from the main branch.
    Even better, I like to alias this to `gcoh` "Git checkout (origin) head"
-
-# Compatibility
-
-Currently works only with MacOS (pasting from clipboard and opening the URL in the browser will only work on Mac).
-Works with GitHub and Bitbucket.
-
-PRs welcome!

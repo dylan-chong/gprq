@@ -22,16 +22,23 @@ installation_dir=~ # Feel free to customise this
 cd $installation_dir
 git clone git@github.com:dylan-chong/gprq.git
 
-echo "source $installation_dir/gprq.bash" >> ~/.bashrc
+printf "\n# Load the gprq function\nsource $installation_dir/gprq/define_gprq.bash\n\n" >> ~/.bashrc
+source .bashrc
 ```
 
 ## ZSH
 
-Use a plugin manager, e.g. Zplug:
+### ZPlug
+
+Similar for other plugin managers
 
 ```zsh
 zplug dylan-chong/gprq, from:github
 ```
+
+### No plugin manager
+
+Use the method in the Bash section, but `s/bash/zsh` in the instructions
 
 # Compatibility
 

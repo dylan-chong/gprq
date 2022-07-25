@@ -5,7 +5,6 @@ function main() {
     git status
     echo
 
-    # TODO tidy
     read -p "Are you on the right base commit *and* does this show the right staged files [y/n]? " CONT
     echo
 
@@ -64,6 +63,7 @@ function open_pull_request_in_browser() {
 
     # MacOS specific
     # TODO detect platform
+    echo "Opening PR URL: $url"
     open "$url"
 }
 

@@ -28,13 +28,17 @@ source .bashrc
 
 ## ZSH
 
-Use a plugin manager, e.g. Zplug:
+### ZPlug
+
+Similar for other plugin managers
 
 ```zsh
 zplug dylan-chong/gprq, from:github
 ```
 
-or alternatively use the method in the Bash section, but `s/bash/zsh` in the instructions
+### No plugin manager
+
+Use the method in the Bash section, but `s/bash/zsh` in the instructions
 
 # Compatibility
 

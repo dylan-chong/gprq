@@ -36,6 +36,18 @@ Similar for other plugin managers
 zplug dylan-chong/gprq, from:github
 ```
 
+### Oh My Zsh
+
+1. In your `.zshrc`
+```zsh
+plugins=(
+    ...
+    gprq
+)
+```
+1. `git clone https://github.com/dylan-chong/gprq ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/gprq`
+1. Start a new zsh session
+
 ### No plugin manager
 
 Use the method in the Bash section, but `s/bash/zsh` in the instructions

@@ -1,8 +1,8 @@
 # gprq
 
-`gprq` "Git Pull Request Quick" is a command to quickly and conveniently create a PR and other stuff!
+`gprq` "Git Pull Request Quick" allows you to commit and create PRs in a single command!
 
-Basically, run `gprq`. You've magically:
+Basically, run `gprq`, and you've magically:
 
 1. created new a branch
 1. committed

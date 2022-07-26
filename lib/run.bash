@@ -21,13 +21,13 @@ function main() {
     else
         # Check if argument is branch name or commit message by if it has
         # no spaces and a / or _ or - in it
-        if [[ "$@" =~ ^[A-Za-z0-9_-]+[/_-][A-Za-z0-9/_-]+$ ]]; then
+        if [[ "$*" =~ ^[A-Za-z0-9_-]+[/_-][A-Za-z0-9/_-]+$ ]]; then
             # Argument was branch name
             local branch=`trim_string "$1"`
             local message=`branch_to_commit_message "$branch"`
         else
             # Argument was commit message
-            local message=`trim_string "$@"`
+            local message=`trim_string "$*"`
             local branch=`commit_message_to_branch "$message"`
         fi
     fi
@@ -52,8 +52,6 @@ function main() {
 
 function trim_string() {
     local string="$1"
-    echo "$1" >> ~/Desktop/log
-    echo "$2" >> ~/Desktop/log
     echo "$string" | trim_string_pipe
 }
 
@@ -173,7 +171,6 @@ function branch_to_commit_message() {
         local separator=': '
         local suffix=${branch#"$prefix"/}
 
-
         # If prefix is JIRA-123 (jira ticket)
         if [[ "$prefix" =~ ^[A-Z][A-Z]+-[123]+$ ]]; then
             local prefix_formatted="$prefix"
@@ -183,7 +180,7 @@ function branch_to_commit_message() {
     else
         local prefix_formatted=''
         local separator=''
-        local suffix="$branch" # TODO this broken?
+        local suffix="$branch"
     fi
 
     # 1. Replace all - and _ with spaces

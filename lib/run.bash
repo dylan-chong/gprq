@@ -29,12 +29,6 @@ function main() {
             # Argument was commit message
             local message=`trim_string "$@"`
             local branch=`commit_message_to_branch "$message"`
-            echo -----------
-            echo @: "$@"
-            echo trim_string 0: `trim_string "$@"`
-            echo trim_string 1: $(trim_string "$@")
-            echo message: "$message"
-            echo branch: "$branch"
         fi
     fi
 
@@ -60,7 +54,7 @@ function trim_string() {
     local string="$1"
     echo "$1" >> ~/Desktop/log
     echo "$2" >> ~/Desktop/log
-    echo "$string" #| trim_string_pipe
+    echo "$string" | trim_string_pipe
 }
 
 function trim_string_pipe() {

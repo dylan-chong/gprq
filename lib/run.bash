@@ -15,18 +15,19 @@ function main() {
 
     if [ -z "$1" ]; then
         # Take commit message from clipboard so you can copy the jira ticket number and description straight after it
-        local message=`pbpaste | tr '\n' ' ' | perl -pe 's/\s+/ /g'`
+        # MacOS specific
+        local message=`trim_string "$(pbpaste)" | tr '\n' ' ' | perl -pe 's/\s+/ /g'`
         local branch=`commit_message_to_branch "$message"`
     else
         # Check if argument is branch name or commit message by if it has
         # no spaces and a / or _ or - in it
         if [[ "$@" =~ ^[A-Za-z0-9_-]+[/_-][A-Za-z0-9/_-]+$ ]]; then
             # Argument was branch name
-            local branch="$1"
+            local branch=`trim_string "$1"`
             local message=`branch_to_commit_message "$branch"`
         else
             # Argument was commit message
-            local message=`echo "$@" | perl -pe 's/^\s*//' | perl -pe 's/\s*$//'`
+            local message=`trim_string "$@"`
             local branch=`commit_message_to_branch "$message"`
         fi
     fi
@@ -49,6 +50,15 @@ function main() {
         && open_pull_request_in_browser
 }
 
+function trim_string() {
+    local string="$1"
+    echo "$1" | trim_string_pipe
+}
+
+function trim_string_pipe() {
+    perl -pe 's/^\s*//' | perl -pe 's/\s*$//'
+}
+
 function open_pull_request_in_browser() {
     # Goes to the URL for creating a new pull request in the browser. For
     # GitHub, the branch is selected automatically, and if the pull request
@@ -62,31 +72,100 @@ function open_pull_request_in_browser() {
     fi
 
     # MacOS specific
-    # TODO detect platform
-    echo "Opening PR URL: $url"
-    open "$url"
+    # If `open` exists. TODO do proper platform check
+    if command -v open &> /dev/null; then
+        open "$url"
+    else
+        echo "'open' could not be found. Open the PR yourself:"
+        echo
+        echo "    $url"
+        echo
+        exit
+    fi
 }
 
 function current_branch() {
     git branch | awk '/^\* / { print $2 }'
 }
 
+# Takes commit message as first argument
+# Input format: "[a prefix: ]a suffix"
+# Input format: "[a-prefix/]a-suffix"
+#
+# TODO make an actual unit test suite
+# function test() {
+    # local result=`commit_message_to_branch "$1"`
+    # if [ "$result" != "$2" ]; then
+        # echo "- Expected '$result' to be '$2'"
+    # fi
+# }
+#
+# test "hello world" "hello-world"
+# test "hello world with lots of words" "hello-world-with-lots-of-words"
+# test "hello: world stuff" "hello/world-stuff"
+# test "Hello: World  stuff" "hello/world-stuff"
+# test "Hello: World__stuff" "hello/world-stuff"
+# test "Hello: world stuff" "hello/world-stuff"
+# test "Hello: world stuff - part 1 - fix things" "hello/world-stuff--part-1--fix-things"
+# test "Hello: world stuff with lots of words" "hello/world-stuff-with-lots-of-words"
+# test "JIRA-123: Hello world stuff" "JIRA-123/hello-world-stuff"
+# test "Testing stuff: Hello world" "testing-stuff/hello-world"
 function commit_message_to_branch() {
-    # TODO refactor and fix bugs, SOLV
     local commit_message="$1"
-    echo $commit_message \
-        | perl -pe 's/(:|\/)//g' \
-        | perl -pe 's/^(SOLV-\d+(?=:)?|[^:]+(?=:)):?\s*(.*\S)\s*$/\1\/\l\2/' \
-        | perl -pe 's/[^\w\/]+/-/g' \
-        | tr '[:upper:]' '[:lower:]' \
-        | perl -pe 's/^solv/SOLV/'
+
+    # If has prefix
+    if [[ "$commit_message" =~ [A-Za-z0-9_-]:\ +[A-Za-z0-9_-] ]]; then
+        local prefix=`echo "$commit_message" | perl -pe 's/:\s+.*//'`
+        local commit_message_separator=`echo "$commit_message" | perl -pe 's/[^:]+(:\s+).*/\1/'`
+        local suffix=${commit_message#"$prefix$commit_message_separator"}
+
+        # If prefix is JIRA-123 (jira ticket)
+        if [[ "$prefix" =~ ^[A-Z][A-Z]+-[123]+$ ]]; then
+            local prefix_formatted="$prefix"
+        else
+            # 1. Lowercase
+            # 2. Trim
+            # 3. Replace multiple spaces with a single "-"
+            local prefix_formatted=`echo "$prefix" | perl -pe 's/([A-Z])/\L\1/g' | trim_string_pipe | perl -pe 's/\s+/-/g'`
+        fi
+
+        local separator='/' # branch separator
+    else
+        local prefix_formatted=''
+        local separator=''
+        local suffix=`echo "$commit_message" | perl -pe 's/([A-Z])/\L\1/g'`
+    fi
+
+    # 1. Lowercase
+    # 2. Trim
+    # 3. Replace space with -
+    # 4. Replace multiple dashes with "--"
+    local suffix_formatted=`echo $suffix | perl -pe 's/([A-Z])/\L\1/g' | trim_string_pipe | perl -pe 's/(\s|_)+/-/g' | perl -pe 's/--+/--/g'`
+
+    echo "$prefix_formatted$separator$suffix_formatted"
 }
 
-# Takes branch as stdin
+# Takes branch as first argument
+# Input format: "[a-prefix/]a-suffix"
+# Output format: "[a prefix: ]a suffix"
+#
+# function test() {
+    # local result=`branch_to_commit_message "$1"`
+    # if [ "$result" != "$2" ]; then
+        # echo "- Expected '$result' to be '$2'"
+    # fi
+# }
+# test "hello-world" "Hello world"
+# test "hello-world-with-lots-of-words" "Hello world with lots of words"
+# test "hello/world-stuff" "hello: World stuff"
+# test "hello/world-stuff--part-1--fix-things" "hello: World stuff - part 1 - fix things"
+# test "hello/world-stuff-with-lots-of-words" "hello: World stuff with lots of words"
+# test "JIRA-123/hello-world-stuff" "JIRA-123: Hello world stuff"
+# test "testing-stuff/hello-world" "testing stuff: Hello world"
 function branch_to_commit_message() {
     local branch="$1"
 
-    # If contains a slash
+    # If has prefix
     if [[ "$branch" =~ / ]]; then
         local prefix=`echo $branch | perl -pe 's/\/.*//'`
         local prefix_formatted="$prefix"
@@ -95,13 +174,13 @@ function branch_to_commit_message() {
     else
         local prefix_formatted=''
         local separator=''
-        local suffix="$branch"
+        local suffix="$branch" # TODO this broken?
     fi
 
-    # Pass branch suffix as argument and convert to commit messagee
     # 1. Replace all - and _ with spaces
     # 2. Replace 2+ spaces with ' - ' so you can use '--' in the branch name represent an actual dash
-    local suffix_formatted=`echo "$suffix" | perl -pe 's/_|-/ /g' | perl -pe 's/\s\s+/ - /g'`
+    # 3. Capitalise first letter
+    local suffix_formatted=`echo "$suffix" | perl -pe 's/_|-/ /g' | perl -pe 's/\s\s+/ - /g' | perl -pe 's/^(\w)/\U\1/'`
 
     echo "$prefix_formatted$separator$suffix_formatted"
 }

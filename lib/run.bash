@@ -52,7 +52,9 @@ function main() {
 
 function trim_string() {
     local string="$1"
-    echo "$1" | trim_string_pipe
+    echo "$1" >> ~/Desktop/log
+    echo "$2" >> ~/Desktop/log
+    echo "$string" | trim_string_pipe
 }
 
 function trim_string_pipe() {
@@ -168,9 +170,16 @@ function branch_to_commit_message() {
     # If has prefix
     if [[ "$branch" =~ / ]]; then
         local prefix=`echo $branch | perl -pe 's/\/.*//'`
-        local prefix_formatted="$prefix"
         local separator=': '
         local suffix=${branch#"$prefix"/}
+
+
+        # If prefix is JIRA-123 (jira ticket)
+        if [[ "$prefix" =~ ^[A-Z][A-Z]+-[123]+$ ]]; then
+            local prefix_formatted="$prefix"
+        else
+            local prefix_formatted=`echo $prefix | perl -pe 's/_|-/ /g'`
+        fi
     else
         local prefix_formatted=''
         local separator=''

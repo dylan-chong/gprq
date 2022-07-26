@@ -76,7 +76,7 @@ Then do one of the following
         - `fix-the-thing`
         - `fix/the-thing`
         - `JIRA-123/fix-the-thing`
-        - or even `JIRA-123/fix-the-thing--part-1--stuff`
+        - `JIRA-123/fix-the-thing--part-1--stuff`
     - The commit message will be a reformatted branch name
 
 1. Pass a commit message - `gprq <commit_message>`
@@ -84,6 +84,7 @@ Then do one of the following
         - `Fix the thing`
         - `Fix: The thing`
         - `JIRA-123: Fix the thing`
+        - `JIRA-123: Fix the thing - Part 1`
     - The branch name will be a reformatted commit message
 
 1. Use branch/commit name of JIRA ticket - My favourite option!

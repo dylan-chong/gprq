@@ -22,7 +22,7 @@ installation_dir=~ # Feel free to customise this
 cd $installation_dir
 git clone git@github.com:dylan-chong/gprq.git
 
-printf "\n# Load the gprq function\nsource $installation_dir/gprq/define_gprq.bash\n\n" >> ~/.bashrc
+printf "\n# Load the gprq function\nsource $installation_dir/gprq/gprq.bash\n\n" >> ~/.bashrc
 source .bashrc
 ```
 

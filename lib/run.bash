@@ -1,17 +1,7 @@
 #!/usr/bin/env bash
 
 function main() {
-    echo '> git status'
-    git status
-    echo
-
-    read -p "Are you on the right base commit *and* does this show the right staged files [y/n]? " CONT
-    echo
-
-    if [ "$CONT" != "y" ]; then
-        echo "Cancelling";
-        return
-    fi
+    user_confirm_status_or_add
 
     if [ -z "$1" ]; then
         # Take commit message from clipboard so you can copy the jira ticket number and description straight after it
@@ -32,11 +22,11 @@ function main() {
         fi
     fi
 
-    echo "New Branch: $branch"
-    echo "Commit message: $message"
+    echo "    New Branch: `bold`$branch`not_bold`"
+    echo "Commit message: `bold`$message`not_bold`"
     echo
 
-    read -p "Are these correct [y/n]? " CONT
+    read -p "Look good? `bold`[y/n]`not_bold`? " CONT
     echo
 
     if [ "$CONT" != "y" ]; then
@@ -48,6 +38,58 @@ function main() {
         && git commit -m "$message" \
         && git push -u origin "$branch" \
         && open_pull_request_in_browser
+}
+
+function user_confirm_status_or_add() {
+    while true; do
+        echo
+        echo '--------------------------------- > git status --------------------------------'
+        echo
+        git status
+        echo
+        echo -------------------------------------------------------------------------------
+        echo
+
+        echo "Are you on the `f -b 'right base commit'` *and* does this show the `f -b 'right staged files'`?"
+        echo "  `f -b 'y'`es:   continue"
+        echo "  `f -b 'a'`:     run 'git add -p'"
+        echo "  `f -b 'r'`:     run 'git reset -p'"
+        echo "  `f -b 'd'`:     run 'git diff --staged'"
+        echo "  `f -b 'f'`:     run 'git add -A' (you slimey bugger ;P)"
+        echo "  `f -b 'n'`o:    cancel"
+        echo
+        read -p "`f -b '[y/n/a/r/d/f]'`? " CONT
+        echo
+
+        case "$CONT" in
+            y)
+                echo -------------------------------------------------------------------------------
+                echo
+                break;
+                ;;
+            a)
+                echo `f -b '✨✨ I like you! ✨✨'`
+                echo '--------------------------------- > git add -p --------------------------------'
+                git add -p
+                ;; # Loop to confirm
+            r)
+                echo '-------------------------------- > git reset -p -------------------------------'
+                git reset -p
+                ;; # Loop to confirm
+            d)
+                echo '----------------------------- > git diff --staged -----------------------------'
+                git --paginate diff --staged
+                ;; # Loop to confirm
+            boo)
+                echo 'Slimey bugger alert!'
+                echo '> git add -A'
+                git add -A
+                ;; # Loop to confirm
+            n|*)
+                echo "Cancelling";
+                exit
+        esac
+    done
 }
 
 function trim_string() {
@@ -189,6 +231,23 @@ function branch_to_commit_message() {
     local suffix_formatted=`echo "$suffix" | perl -pe 's/_|-/ /g' | perl -pe 's/\s\s+/ - /g' | perl -pe 's/^(\w)/\U\1/'`
 
     echo "$prefix_formatted$separator$suffix_formatted"
+}
+
+# Format
+function f() {
+    if [ "$1" != "-b" ]; then
+        echo "Only -b" is supported
+    fi
+
+    printf `bold`"${@: 2}"`not_bold`
+}
+
+function bold() {
+    tput bold
+}
+
+function not_bold() {
+    tput sgr0
 }
 
 main $@

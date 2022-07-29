@@ -51,14 +51,15 @@ function user_confirm_status_or_add() {
         echo
 
         echo "Are you on the `f -b 'right base commit'` *and* does this show the `f -b 'right staged files'`?"
-        echo "  `f -b 'y'`es:   continue"
-        echo "  `f -b 'a'`:     run 'git add -p'"
-        echo "  `f -b 'r'`:     run 'git reset -p'"
-        echo "  `f -b 'd'`:     run 'git diff --staged'"
-        echo "  `f -b 'f'`:     run 'git add -A' (you slimey bugger ;P)"
-        echo "  `f -b 'n'`o:    cancel"
+        echo "  `f -b 'y'`es:         continue"
+        echo "  `f -b 'a'`:           run 'git add -p'"
+        echo "  `f -b 'af <file>'`:   run 'git add <filename>'"
+        echo "  `f -b 'r'`:           run 'git reset -p'"
+        echo "  `f -b 'd'`:           run 'git diff --staged'"
+        echo "  `f -b 'F'`:           run 'git add -A' (you slimey bugger ;P)"
+        echo "  `f -b 'n'`o:          cancel"
         echo
-        read -p "`f -b '[y/n/a/r/d/f]'`? " CONT
+        read -p "`f -b '[y/n/a/af/r/d/F]'`? " CONT
         echo
 
         case "$CONT" in

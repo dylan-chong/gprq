@@ -2,6 +2,8 @@
 
 `gprq` "Git Pull Request Quick" -- commit, branch and create a PR in a single command!
 
+![So quick an easy!](docs/gprq_simple_prompt.png)
+
 Basically, run `gprq`, and you've magically:
 
 1. created new a branch
@@ -68,13 +70,8 @@ PRs welcome!
 
 It gets even more convenient!
 Start off by making your code changes.
-Then
 
-```
-git add <stuff to commit>
-```
-
-Then do one of the following
+Then do one of the following *(if you're committing for a JIRA ticket, see no 3)*:
 
 1. Pass a branch name - `gprq <branch_name>`
     - branch_name can be something like:

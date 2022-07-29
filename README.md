@@ -1,18 +1,16 @@
 # gprq
 
-`gprq` "Git Pull Request Quick" -- commit, branch and create a PR in a single command!
+`gprq` &emdash "Git Pull Request Quick"
 
-![So quick an easy!](docs/gprq_simple_prompt.png)
+Git add, branch, commit, create PR, open browser &emdash in a single command!
 
-Basically, run `gprq`, and you've magically:
+![So quick an easy!](docs/interactive_prompt_commit_message.png)
 
-1. created new a branch
-1. committed
-1. pushed the branch to `origin`
-1. opened the URL to create a Pull Request in the browser.
-    - (If the PR already exists, GitHub will redirect you to the existing PR)
+It even works with a branch!
 
-It's great for doing lots of atomic PRs/commits (small PRs with a single
+![It even works with a branch!](docs/interactive_prompt_branch.png)
+
+`gprq` is great for doing lots of atomic PRs/commits (small PRs with a single
 purpose, so they are easy for people to code review).
 
 # Installation
@@ -71,7 +69,7 @@ PRs welcome!
 It gets even more convenient!
 Start off by making your code changes.
 
-Then do one of the following *(if you're committing for a JIRA ticket, see no 3)*:
+Then do one of the following *(if you're committing for a JIRA ticket, see option 3)*:
 
 1. Pass a branch name - `gprq <branch_name>`
     - branch_name can be something like:

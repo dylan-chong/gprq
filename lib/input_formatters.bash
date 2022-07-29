@@ -75,3 +75,10 @@ function branch_to_commit_message() {
 
     echo "$prefix_formatted$separator$suffix_formatted"
 }
+
+# Input is stdin
+function reformat_clipboard_to_commit_message() {
+    tr '\n' ' ' \
+        | perl -pe 's/\s+/ /g' \
+        | trim_string_pipe
+}

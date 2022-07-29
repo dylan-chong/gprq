@@ -8,7 +8,7 @@ export GPRQ_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && p
 
 gprq() {
     cmd="\
-        set -e \
+        set -eo pipefail \
         && source $GPRQ_DIR/lib/main.bash \
         && main \"$@\" \
         "

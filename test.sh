@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -eo pipefail
 source ./lib/main.bash
 
 failed_tests=0
@@ -30,34 +30,91 @@ function test() {
         return
     fi
 
+    log AAAAAAAAA: "$function_call_string"
     local result=`eval $function_call_string`
 
     expect_to_equal "$result" "$expected" "$function_call_string"
 }
 
-test 'commit_message_to_branch "hello world"' == "hello-world"
-test 'commit_message_to_branch "hello world with lots of words"' == "hello-world-with-lots-of-words"
-test 'commit_message_to_branch "hello: world stuff"' == "hello/world-stuff"
-test 'commit_message_to_branch "Hello: World  stuff"' == "hello/world-stuff"
-test 'commit_message_to_branch "Hello: World__stuff"' == "hello/world-stuff"
-test 'commit_message_to_branch "Hello: world stuff"' == "hello/world-stuff"
-test 'commit_message_to_branch "Hello: world stuff - part 1 - fix things"' == "hello/world-stuff--part-1--fix-things"
-test 'commit_message_to_branch "Hello: world stuff with lots of words"' == "hello/world-stuff-with-lots-of-words"
-test 'commit_message_to_branch "JIRA-123: Hello world stuff"' == "JIRA-123/hello-world-stuff"
-test 'commit_message_to_branch "JIRA-123 Hello world stuff"' == "JIRA-123/hello-world-stuff"
-test 'commit_message_to_branch "JIRA-123     Hello world stuff"' == "JIRA-123/hello-world-stuff"
-test 'commit_message_to_branch "Testing stuff: Hello world"' == "testing-stuff/hello-world"
+# ************************* Test: commit_message_to_branch *************************
 
-test 'branch_to_commit_message "hello-world"' == "Hello world"
-test 'branch_to_commit_message "hello-world-with-lots-of-words"' == "Hello world with lots of words"
-test 'branch_to_commit_message "hello/world-stuff"' == "hello: World stuff"
-test 'branch_to_commit_message "hello/world-stuff--part-1--fix-things"' == "hello: World stuff - part 1 - fix things"
-test 'branch_to_commit_message "hello/world-stuff-with-lots-of-words"' == "hello: World stuff with lots of words"
-test 'branch_to_commit_message "JIRA-123/hello-world-stuff"' == "JIRA-123: Hello world stuff"
-test 'branch_to_commit_message "testing-stuff/hello-world"' == "testing stuff: Hello world"
+test 'commit_message_to_branch "hello world"' \
+    == "hello-world"
+test 'commit_message_to_branch "hello world with lots of words"' \
+    == "hello-world-with-lots-of-words"
+test 'commit_message_to_branch "hello: world stuff"' \
+    == "hello/world-stuff"
+test 'commit_message_to_branch "Hello: World  stuff"' \
+    == "hello/world-stuff"
+test 'commit_message_to_branch "Hello: World__stuff"' \
+    == "hello/world-stuff"
+test 'commit_message_to_branch "Hello: world stuff"' \
+    == "hello/world-stuff"
+test 'commit_message_to_branch "Hello: world stuff - part 1 - fix things"' \
+    == "hello/world-stuff--part-1--fix-things"
+test 'commit_message_to_branch "Hello: world stuff with lots of words"' \
+    == "hello/world-stuff-with-lots-of-words"
+test 'commit_message_to_branch "JIRA-123: Hello world stuff"' \
+    == "JIRA-123/hello-world-stuff"
+test 'commit_message_to_branch "JIRA-123 Hello world stuff"' \
+    == "JIRA-123/hello-world-stuff"
+test 'commit_message_to_branch "JIRA-123     Hello world stuff"' \
+    == "JIRA-123/hello-world-stuff" # Required for reformat_clipboard_to_commit_message to work
+test 'commit_message_to_branch "Testing stuff: Hello world"' \
+    == "testing-stuff/hello-world"
 
-# test 'reformat_clipboard_to_commit_message "hello world"' == "hello-world"
-# test 'reformat_clipboard_to_commit_message "sfdsf"' == "hello-world"
+# ************************* Test: branch_to_commit_message *************************
+
+test 'branch_to_commit_message "hello-world"' \
+    == "Hello world"
+test 'branch_to_commit_message "hello-world-with-lots-of-words"' \
+    == "Hello world with lots of words"
+test 'branch_to_commit_message "hello/world-stuff"' \
+    == "hello: World stuff"
+test 'branch_to_commit_message "hello/world-stuff--part-1--fix-things"' \
+    == "hello: World stuff - part 1 - fix things"
+test 'branch_to_commit_message "hello/world-stuff-with-lots-of-words"' \
+    == "hello: World stuff with lots of words"
+test 'branch_to_commit_message "JIRA-123/hello-world-stuff"' \
+    == "JIRA-123: Hello world stuff"
+test 'branch_to_commit_message "testing-stuff/hello-world"' \
+    == "testing stuff: Hello world"
+
+# ************************* Test: reformat_clipboard_to_commit_message *************************
+
+test 'printf "hello world" | reformat_clipboard_to_commit_message' \
+    == "hello world"
+test 'printf "JIRA-123 Hello world stuff" | reformat_clipboard_to_commit_message' \
+    == "JIRA-123 Hello world stuff"
+test 'printf "JIRA-123      Hello world stuff" | reformat_clipboard_to_commit_message' \
+    == "JIRA-123 Hello world stuff"
+test 'printf "ARIJ-987654\n\n\nThis is a test ARIJ task\n" | reformat_clipboard_to_commit_message' \
+    == "ARIJ-987654 This is a test ARIJ task"
+
+# ********** Test: `reformat_clipboard_to_commit_message | commit_message_to_branch` produces branch **********
+
+# test 'printf "hello world\n" '\
+# \ \ '| reformat_clipboard_to_commit_message '\
+# \ \ '| branch_to_commit_message' \
+    # == "hello-world"
+# test 'printf "JIRA-123 Hello world stuff" '\
+# \ \ '| reformat_clipboard_to_commit_message '\
+# \ \ '| branch_to_commit_message' \
+    # == "JIRA-123/hello-world-stuff"
+# test 'printf "JIRA-123      Hello world stuff" '\
+# \ \ '| reformat_clipboard_to_commit_message '\
+# \ \ '| branch_to_commit_message' \
+    # == "JIRA-123/hello-world-stuff"
+# test 'printf "ARIJ-987654\n\n\nThis is a test ARIJ task\n" '\
+# \ \ '| reformat_clipboard_to_commit_message '\
+# \ \ '| branch_to_commit_message' \
+    # == "ARIJ-987654/this-is-a-test-ARIJ-task"
+
+
+
+
+# TODO
+printf "ARIJ-987654\n\n\nThis is a test ARIJ task\n"  | reformat_clipboard_to_commit_message  | branch_to_commit_message
 
 echo
 

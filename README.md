@@ -67,15 +67,7 @@ PRs welcome!
 # Usage
 
 Do coding stuff.
-Then do one of the following; *(Just finished a JIRA ticket? See option 3)*:
-
-1. Pass a branch name - `gprq <branch_name>`
-    - branch_name can be something like:
-        - `fix-the-thing`
-        - `fix/the-thing`
-        - `JIRA-123/fix-the-thing`
-        - `JIRA-123/fix-the-thing--part-1--stuff`
-    - The commit message will be a reformatted branch name
+Then do one of the following; *(Just finished a JIRA ticket? See option 2)*:
 
 1. Pass a commit message - `gprq <commit_message>`
     - commit_message can be something like:
@@ -92,6 +84,14 @@ Then do one of the following; *(Just finished a JIRA ticket? See option 3)*:
     - Copy it to your clipboard
     - Run `gcmq`
     - Profit! (yea, lol, it works :shrug:)
+
+1. Pass a branch name - `gprq <branch_name>`
+    - branch_name can be something like:
+        - `fix-the-thing`
+        - `fix/the-thing`
+        - `JIRA-123/fix-the-thing`
+        - `JIRA-123/fix-the-thing--part-1--stuff`
+    - The commit message will be a reformatted branch name
 
 # Tips
 

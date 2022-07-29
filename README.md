@@ -4,11 +4,11 @@
 
 Git add, branch, commit, create PR, open browser &emdash in a single command!
 
-![So quick an easy!](docs/interactive_prompt_commit_message.png)
+![So quick an easy!](docs/gprq_simple_prompt_commit_message.png)
 
 It even works with a branch!
 
-![It even works with a branch!](docs/interactive_prompt_branch.png)
+![It even works with a branch!](docs/gprq_simple_prompt_branch.png)
 
 `gprq` is great for doing lots of atomic PRs/commits (small PRs with a single
 purpose, so they are easy for people to code review).

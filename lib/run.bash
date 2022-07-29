@@ -78,6 +78,9 @@ function user_confirm_status_or_add() {
                 ;; # Loop to confirm or add more files
             af*)
                 local path=`echo $CONT | perl -pe 's/^af\s*//'`
+                if [ "$path" == "." ]; then
+                    echo "Unbelievable!"
+                fi
                 echo "------------------ > git add ${path} -----------------"
                 git add "$path"
                 ;; # Loop to confirm or add more files

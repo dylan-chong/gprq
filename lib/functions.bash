@@ -1,12 +1,14 @@
-#!/usr/bin/env bash
-
+function log() {
+    echo "$*" >> ~/Desktop/log
+}
 function main() {
     user_confirm_status_or_add
 
     if [ -z "$1" ]; then
         # Take commit message from clipboard so you can copy the jira ticket number and description straight after it
         # MacOS specific
-        local message=`trim_string "$(pbpaste)" | tr '\n' ' ' | perl -pe 's/\s+/ /g'`
+        # TODO fn and tests
+        local message=`pbpaste | tr '\n' ' ' | perl -pe 's/\s+/ /g' | trim_string_pipe`
         local branch=`commit_message_to_branch "$message"`
     else
         # Check if argument is branch name or commit message by if it has
@@ -150,36 +152,25 @@ function current_branch() {
 # Takes commit message as first argument
 # Input format: "[a prefix: ]a suffix"
 # Input format: "[a-prefix/]a-suffix"
-#
-# TODO make an actual unit test suite
-# function test() {
-    # local result=`commit_message_to_branch "$1"`
-    # if [ "$result" != "$2" ]; then
-        # echo "- Expected '$result' to be '$2'"
-    # fi
-# }
-#
-# test "hello world" "hello-world"
-# test "hello world with lots of words" "hello-world-with-lots-of-words"
-# test "hello: world stuff" "hello/world-stuff"
-# test "Hello: World  stuff" "hello/world-stuff"
-# test "Hello: World__stuff" "hello/world-stuff"
-# test "Hello: world stuff" "hello/world-stuff"
-# test "Hello: world stuff - part 1 - fix things" "hello/world-stuff--part-1--fix-things"
-# test "Hello: world stuff with lots of words" "hello/world-stuff-with-lots-of-words"
-# test "JIRA-123: Hello world stuff" "JIRA-123/hello-world-stuff"
-# test "Testing stuff: Hello world" "testing-stuff/hello-world"
 function commit_message_to_branch() {
     local commit_message="$1"
 
+    # If has JIRA prefix without the colon. Prefix must be uppercase
+    if [[ "$commit_message" =~ ^[A-Z][A-Z]+-[0-9]+\ + ]]; then
+        # Insert colon after JIRA prefix
+        local commit_message_with_colon=`echo $commit_message | perl -pe 's/(^[A-Z][A-Z]+-[0-9]+)\s+/\1: /'`
+        commit_message_to_branch "$commit_message_with_colon"
+        return
+    fi
+
     # If has prefix
-    if [[ "$commit_message" =~ [A-Za-z0-9_-]:\ +[A-Za-z0-9_-] ]]; then
-        local prefix=`echo "$commit_message" | perl -pe 's/:\s+.*//'`
+    if [[ "$commit_message" =~ : ]]; then
+        local prefix=`echo "$commit_message" | perl -pe 's/:.*//'`
         local commit_message_separator=`echo "$commit_message" | perl -pe 's/[^:]+(:\s+).*/\1/'`
         local suffix=${commit_message#"$prefix$commit_message_separator"}
 
         # If prefix is JIRA-123 (jira ticket)
-        if [[ "$prefix" =~ ^[A-Z][A-Z]+-[123]+$ ]]; then
+        if [[ "$prefix" =~ ^[A-Z][A-Z]+-[0-9]+ ]]; then
             local prefix_formatted="$prefix"
         else
             # 1. Lowercase
@@ -207,20 +198,6 @@ function commit_message_to_branch() {
 # Takes branch as first argument
 # Input format: "[a-prefix/]a-suffix"
 # Output format: "[a prefix: ]a suffix"
-#
-# function test() {
-    # local result=`branch_to_commit_message "$1"`
-    # if [ "$result" != "$2" ]; then
-        # echo "- Expected '$result' to be '$2'"
-    # fi
-# }
-# test "hello-world" "Hello world"
-# test "hello-world-with-lots-of-words" "Hello world with lots of words"
-# test "hello/world-stuff" "hello: World stuff"
-# test "hello/world-stuff--part-1--fix-things" "hello: World stuff - part 1 - fix things"
-# test "hello/world-stuff-with-lots-of-words" "hello: World stuff with lots of words"
-# test "JIRA-123/hello-world-stuff" "JIRA-123: Hello world stuff"
-# test "testing-stuff/hello-world" "testing stuff: Hello world"
 function branch_to_commit_message() {
     local branch="$1"
 
@@ -256,7 +233,7 @@ function f() {
         echo "Only -b" is supported
     fi
 
-    printf `bold`"${@: 2}"`not_bold`
+    printf "`bold`${@: 2}`not_bold`"
 }
 
 function bold() {
@@ -266,5 +243,3 @@ function bold() {
 function not_bold() {
     tput sgr0
 }
-
-main $@

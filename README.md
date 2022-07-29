@@ -1,8 +1,8 @@
 # gprq
 
-`gprq` &emdash "Git Pull Request Quick"
+`gprq` &emdash; "Git Pull Request Quick"
 
-Git add, branch, commit, create PR, open browser &emdash in a single command!
+Git add, branch, commit, create PR, open browser &emdash; in a single command!
 
 ![So quick an easy!](docs/gprq_simple_prompt_commit_message.png)
 

@@ -5,5 +5,11 @@
 GPRQ_DIR=$( cd -- "$( dirname -- "$0" )" &> /dev/null && pwd )
 
 gprq() {
-    "$GPRQ_DIR/lib/run.bash" $@
+    cmd="\
+        set -e \
+        && source $GPRQ_DIR/lib/functions.bash \
+        && main $@ \
+        "
+
+    bash -c "$cmd"
 }

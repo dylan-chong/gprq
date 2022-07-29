@@ -55,8 +55,9 @@ function user_confirm_status_or_add() {
         echo "Are you on the `f -b 'right base commit'` *and* does this show the `f -b 'right staged files'`?"
         echo "  `f -b 'y'`es:         continue"
         echo "  `f -b 'a'`:           run 'git add -p'"
-        echo "  `f -b 'af <path>'`:   run 'git add <path>'"
+        echo "  `f -b 'af'` <path>:   run 'git add <path>'"
         echo "  `f -b 'r'`:           run 'git reset -p'"
+        echo "  `f -b 'rf'` <path>:   run 'git reset <path>'"
         echo "  `f -b 'd'`:           run 'git diff --staged'"
         echo "  `f -b 'F'`:           run 'git add -A' (you slimey bugger ;P)"
         echo "  `f -b 'n'`o:          cancel"
@@ -84,11 +85,16 @@ function user_confirm_status_or_add() {
                 echo '-------------------------------- > git reset -p -------------------------------'
                 git reset -p
                 ;; # Loop to confirm or add more files
+            rf*)
+                local path=`echo $CONT | perl -pe 's/^rf\s*//'`
+                echo "----------------- > git reset ${path} ----------------"
+                git reset "$path"
+                ;; # Loop to confirm or add more files
             d)
                 echo '----------------------------- > git diff --staged -----------------------------'
                 git --paginate diff --staged
                 ;; # Loop to confirm or add more files
-            boo)
+            F)
                 echo 'Slimey bugger alert!'
                 echo '> git add -A'
                 git add -A

@@ -28,12 +28,14 @@ source .bashrc
 
 ## ZSH
 
-### ZPlug
+### ZPlug / Antigen / Other Plugin manager
 
 Similar for other plugin managers
 
 ```zsh
 zplug dylan-chong/gprq, from:github
+antigen bundle dylan-chong/gprq
+...
 ```
 
 ### Oh My Zsh
@@ -54,7 +56,10 @@ Use the method in the Bash section, but `s/bash/zsh` in the instructions
 
 # Compatibility
 
-Currently works only with MacOS (pasting from clipboard and opening the URL in the browser will only work on Mac).
+Currently only fully supports MacOS (pasting from clipboard and opening the URL
+in the browser will only work on Mac). Otherwise it should :tm: work on any
+Unix OS.
+
 Works with GitHub and Bitbucket.
 
 PRs welcome!

@@ -56,15 +56,15 @@ function user_confirm_status_or_add() {
 
         echo "Are you on the `f -b 'right base commit'` *and* does this show the `f -b 'right staged files'`?"
         echo "  `f -b 'y'`es:         continue"
+        echo "  `f -b 'n'`o:          cancel"
         echo "  `f -b 'a'`:           run 'git add -p'"
         echo "  `f -b 'af'` <path>:   run 'git add <path>'"
         echo "  `f -b 'r'`:           run 'git reset -p'"
         echo "  `f -b 'rf'` <path>:   run 'git reset <path>'"
         echo "  `f -b 'd'`:           run 'git diff --staged'"
         echo "  `f -b 'F'`:           run 'git add -A' (you slimey bugger ;P)"
-        echo "  `f -b 'n'`o:          cancel"
         echo
-        read -p "`f -b '[y/n/a/af/r/d/F]'`? " CONT
+        read -p "`f -b '[y/n/a/af/r/rf/d/F]'`? " CONT
         echo
 
         case "$CONT" in
@@ -74,7 +74,7 @@ function user_confirm_status_or_add() {
                 break;
                 ;;
             a)
-                echo `f -b '✨✨ I like you! ✨✨'`
+                f -b '✨✨ I like you! ✨✨'
                 echo '--------------------------------- > git add -p --------------------------------'
                 git add -p
                 ;; # Loop to confirm or add more files
@@ -104,9 +104,14 @@ function user_confirm_status_or_add() {
                 echo '> git add -A'
                 git add -A
                 ;; # Loop to confirm
-            n|*)
+            n|exit)
                 echo "Cancelling";
                 exit
+                ;;
+            *)
+                f -b "Huh? I didn't understand \`$CONT\`"
+                echo
+                ;; # Loop
         esac
     done
 }

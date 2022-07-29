@@ -38,8 +38,13 @@ function main() {
         return
     fi
 
-    git checkout -b "$branch" \
-        && git commit -m "$message" \
+    if git show-ref -q --heads "$branch"; then
+        f -b "Error: Branch '$branch' already exists\n"
+        exit 1
+    fi
+
+    git commit -m "$message" \
+        && git checkout -b "$branch" \
         && git push -u origin "$branch" \
         && open_pull_request_in_browser
 }

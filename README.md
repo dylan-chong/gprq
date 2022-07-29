@@ -66,9 +66,7 @@ PRs welcome!
 
 # Usage
 
-It gets even more convenient!
-Start off by making your code changes.
-
+Do coding stuff.
 Then do one of the following *(if you're committing for a JIRA ticket, see option 3)*:
 
 1. Pass a branch name - `gprq <branch_name>`

@@ -31,3 +31,11 @@ function bold() {
 function not_bold() {
     tput sgr0
 }
+
+function exec_python() {
+    if command -v python &> /dev/null; then
+        /usr/bin/env python3 "$@"
+    else
+        /usr/bin/env python "$@"
+    fi
+}

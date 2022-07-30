@@ -57,7 +57,7 @@ function branch_to_commit_message() {
         local suffix=${branch#"$prefix"/}
 
         # If prefix is JIRA-123 (jira ticket)
-        if [[ "$prefix" =~ ^[A-Z][A-Z]+-[123]+$ ]]; then
+        if [[ "$prefix" =~ ^[A-Z][A-Z]+-[0-9]+$ ]]; then
             local prefix_formatted="$prefix"
         else
             local prefix_formatted=`echo $prefix | perl -pe 's/_|-/ /g'`
@@ -78,7 +78,32 @@ function branch_to_commit_message() {
 
 # Input is stdin
 function reformat_clipboard_to_commit_message() {
-    tr '\n' ' ' \
-        | perl -pe 's/\s+/ /g' \
-        | trim_string_pipe
+    # Usually multiline
+    local clipboard="$(< /dev/stdin)"
+    local temp_file=`mktemp`
+    echo "$clipboard" > "$temp_file"
+
+    exec_python -c "
+import re
+import sys
+
+JIRA_PREFIX_RE=r'^([A-Z][A-Z]+-[0-9]+):?\\s*?'
+
+temp_file=sys.argv[1]
+with open(temp_file) as f:
+    clipboard = f.read()
+
+lines = [line for line in clipboard.split('\n') if line != '']
+
+# If JIRA ticket at start of first line
+if len(lines) == 1 and re.search(JIRA_PREFIX_RE, lines[0]):
+    lines[0] = re.sub(JIRA_PREFIX_RE, r'\\1:' , lines[0])
+
+joined_lines = ': '.join(lines)
+joined_lines = re.sub(r':+', ':', joined_lines)
+
+print(joined_lines)
+" "$temp_file"
+
+    rm "$temp_file"
 }

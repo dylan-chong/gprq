@@ -84,6 +84,8 @@ test 'branch_to_commit_message "hello/world-stuff-with-lots-of-words"' \
     == "hello: World stuff with lots of words"
 test 'branch_to_commit_message "JIRA-123/hello-world-stuff"' \
     == "JIRA-123: Hello world stuff"
+test 'branch_to_commit_message "JIRA-9375017/hello-world-stuff"' \
+    == "JIRA-9375017: Hello world stuff"
 test 'branch_to_commit_message "testing-stuff/hello-world"' \
     == "testing stuff: Hello world"
 
@@ -91,12 +93,18 @@ test 'branch_to_commit_message "testing-stuff/hello-world"' \
 
 test 'printf "hello world" | reformat_clipboard_to_commit_message' \
     == "hello world"
+test 'printf "custom prefix: testing" | reformat_clipboard_to_commit_message' \
+    == "custom prefix: testing"
+test 'printf "custom prefix:\n\ntesting" | reformat_clipboard_to_commit_message' \
+    == "custom prefix: testing"
+test 'printf "custom prefix\n\n\ntesting" | reformat_clipboard_to_commit_message' \
+    == "custom prefix: testing"
 test 'printf "JIRA-123 Hello world stuff" | reformat_clipboard_to_commit_message' \
-    == "JIRA-123 Hello world stuff"
+    == "JIRA-123: Hello world stuff"
 test 'printf "JIRA-123      Hello world stuff" | reformat_clipboard_to_commit_message' \
-    == "JIRA-123 Hello world stuff"
+    == "JIRA-123: Hello world stuff"
 test 'printf "ARIJ-987654\n\n\nThis is a test ARIJ task\n" | reformat_clipboard_to_commit_message' \
-    == "ARIJ-987654 This is a test ARIJ task"
+    == "ARIJ-987654: This is a test ARIJ task"
 
 echo
 echo

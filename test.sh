@@ -91,31 +91,6 @@ test 'printf "JIRA-123      Hello world stuff" | reformat_clipboard_to_commit_me
 test 'printf "ARIJ-987654\n\n\nThis is a test ARIJ task\n" | reformat_clipboard_to_commit_message' \
     == "ARIJ-987654 This is a test ARIJ task"
 
-# ********** Test: `reformat_clipboard_to_commit_message | commit_message_to_branch` produces branch **********
-
-# test 'printf "hello world\n" '\
-# \ \ '| reformat_clipboard_to_commit_message '\
-# \ \ '| branch_to_commit_message' \
-    # == "hello-world"
-# test 'printf "JIRA-123 Hello world stuff" '\
-# \ \ '| reformat_clipboard_to_commit_message '\
-# \ \ '| branch_to_commit_message' \
-    # == "JIRA-123/hello-world-stuff"
-# test 'printf "JIRA-123      Hello world stuff" '\
-# \ \ '| reformat_clipboard_to_commit_message '\
-# \ \ '| branch_to_commit_message' \
-    # == "JIRA-123/hello-world-stuff"
-# test 'printf "ARIJ-987654\n\n\nThis is a test ARIJ task\n" '\
-# \ \ '| reformat_clipboard_to_commit_message '\
-# \ \ '| branch_to_commit_message' \
-    # == "ARIJ-987654/this-is-a-test-ARIJ-task"
-
-
-
-
-# TODO
-printf "ARIJ-987654\n\n\nThis is a test ARIJ task\n"  | reformat_clipboard_to_commit_message  | branch_to_commit_message
-
 echo
 
 if [ "$failed_tests" == "0" ]; then

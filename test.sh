@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 set -eo pipefail
+
+echo Running tests...
+
 source ./lib/main.bash
 
 failed_tests=0
@@ -10,14 +13,18 @@ function expect_to_equal() {
     local expected="$2"
     local label="$3"
 
-    if [ "$actual" != "$expected" ]; then
-        echo "- Test failed: \`$label\`"
-        actual_msg=`f -b "$actual"`
-        expected_msg=`f -b "$expected"`
-        echo "    - Expected ${actual_msg} to be ${expected_msg}"
-        echo
-        failed_tests=$((failed_tests+1))
+    if [ "$actual" == "$expected" ]; then
+        printf '.' # no newline
+        return
     fi
+
+    echo
+    echo "- Test failed: \`$label\`"
+    actual_msg=`f -b "$actual"`
+    expected_msg=`f -b "$expected"`
+    echo "    - Expected ${actual_msg} to be ${expected_msg}"
+    echo
+    failed_tests=$((failed_tests+1))
 }
 
 function test() {
@@ -91,6 +98,7 @@ test 'printf "JIRA-123      Hello world stuff" | reformat_clipboard_to_commit_me
 test 'printf "ARIJ-987654\n\n\nThis is a test ARIJ task\n" | reformat_clipboard_to_commit_message' \
     == "ARIJ-987654 This is a test ARIJ task"
 
+echo
 echo
 
 if [ "$failed_tests" == "0" ]; then

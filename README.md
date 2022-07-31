@@ -88,7 +88,11 @@ Then do one of the following; *(Just finished a JIRA ticket? See option 2)*:
 website` from your JIRA ticket ![JIRA ticket](./docs/jira_screenshot.png)
     - Tip: It's easiest if drag-select from the right of the title up/left
 - Copy it to your clipboard
-- Run `gprq`
+- Run `gprq`. You will see:
+    ```
+        New Branch: JIRA-123/fix-the-thing-from-the-website
+    Commit message: JIRA-123: Fix the thing from the website
+    ```
 - Profit! (yea, lol, it works :shrug:)
 
 ## 3. Pass a branch name - `gprq <branch_name>`

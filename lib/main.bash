@@ -65,7 +65,8 @@ function user_confirm_status_or_add() {
         echo "  `f -b 'af'` <path>:   run 'git add <path>'"
         echo "  `f -b 'r'`:           run 'git reset -p'"
         echo "  `f -b 'rf'` <path>:   run 'git reset <path>'"
-        echo "  `f -b 'd'`:           run 'git diff --staged'"
+        echo "  `f -b 'd'`:           run 'git diff'"
+        echo "  `f -b 'D'`:           run 'git diff --staged'"
         echo "  `f -b 'F'`:           run 'git add -A' (you slimey bugger ;P)"
         echo
         read -p "`f -b '[y/n/a/af/r/rf/d/F]'`? " CONT
@@ -91,7 +92,7 @@ function user_confirm_status_or_add() {
                 git add "$path"
                 ;; # Loop to confirm or add more files
             r)
-                echo '-------------------------------- > git reset -p -------------------------------'
+                echo '------------------------------- > git reset -p --------------------------------'
                 git reset -p
                 ;; # Loop to confirm or add more files
             rf*)
@@ -100,6 +101,10 @@ function user_confirm_status_or_add() {
                 git reset "$path"
                 ;; # Loop to confirm or add more files
             d)
+                echo '--------------------------------- > git diff ----------------------------------'
+                git --paginate diff
+                ;; # Loop to confirm or add more files
+            D)
                 echo '----------------------------- > git diff --staged -----------------------------'
                 git --paginate diff --staged
                 ;; # Loop to confirm or add more files

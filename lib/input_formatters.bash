@@ -83,6 +83,7 @@ function reformat_clipboard_to_commit_message() {
     local temp_file=`mktemp`
     echo "$clipboard" > "$temp_file"
 
+    # TODO is the better option actually to use node due to better libraries like git-open
     exec_python -c "
 import re
 import sys

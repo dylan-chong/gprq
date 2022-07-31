@@ -13,6 +13,8 @@ Wowwwww what is this [magic](#marker-jira-ticket)???
 `gprq` is great for doing lots of atomic PRs/commits (small PRs with a single
 purpose, so they are easy for people to code review).
 
+---
+
 # Installation
 
 ## Bash
@@ -64,34 +66,41 @@ Works with GitHub and Bitbucket.
 
 PRs welcome!
 
+---
+
 # Usage
 
 Do coding stuff.
 Then do one of the following; *(Just finished a JIRA ticket? See option 2)*:
 
-1. Pass a commit message - `gprq <commit_message>`
-    - commit_message can be something like:
-        - `Fix the thing`
-        - `Fix: The thing`
-        - `JIRA-123: Fix the thing`
-        - `JIRA-123: Fix the thing - Part 1`
-    - The branch name will be a reformatted commit message
+## 1. Pass a commit message - `gprq <commit_message>`
 
-1. Use branch/commit name of JIRA ticket - My favourite option! <span id="marker-jira-ticket"></span>
-    - Drag-select the `JIRA-123 Fix the thing from the
-   website` from your JIRA ticket ![JIRA ticket](./docs/jira_screenshot.png)
-        - Tip: It's easiest if drag-select from the right of the title up/left
-    - Copy it to your clipboard
-    - Run `gcmq`
-    - Profit! (yea, lol, it works :shrug:)
+- commit_message can be something like:
+    - `Fix the thing`
+    - `Fix: The thing`
+    - `JIRA-123: Fix the thing`
+    - `JIRA-123: Fix the thing - Part 1`
+- The branch name will be a reformatted commit message
 
-1. Pass a branch name - `gprq <branch_name>`
-    - branch_name can be something like:
-        - `fix-the-thing`
-        - `fix/the-thing`
-        - `JIRA-123/fix-the-thing`
-        - `JIRA-123/fix-the-thing--part-1--stuff`
-    - The commit message will be a reformatted branch name
+## 2. Use JIRA ticket number and title - My favourite option! <span id="marker-jira-ticket"></span>
+
+- Drag-select the `JIRA-123 Fix the thing from the
+website` from your JIRA ticket ![JIRA ticket](./docs/jira_screenshot.png)
+    - Tip: It's easiest if drag-select from the right of the title up/left
+- Copy it to your clipboard
+- Run `gprq`
+- Profit! (yea, lol, it works :shrug:)
+
+## 3. Pass a branch name - `gprq <branch_name>`
+
+- branch_name can be something like:
+    - `fix-the-thing`
+    - `fix/the-thing`
+    - `JIRA-123/fix-the-thing`
+    - `JIRA-123/fix-the-thing--part-1--stuff`
+- The commit message will be a reformatted branch name
+
+---
 
 # Tips
 

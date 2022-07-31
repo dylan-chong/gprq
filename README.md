@@ -2,7 +2,7 @@
 
 `gprq` — "Git Pull Request Quick".
 
-Git `add`, `branch`, `commit`, create PR, open browser — in a single command!
+Git `add`, `branch`, `commit`, `push`, create PR, open browser — in a single command!
 
 ![So quick an easy!](docs/gprq_simple_prompt_commit_message.png)
 

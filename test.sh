@@ -37,7 +37,6 @@ function test() {
         return
     fi
 
-    log AAAAAAAAA: "$function_call_string"
     local result=`eval $function_call_string`
 
     expect_to_equal "$result" "$expected" "$function_call_string"

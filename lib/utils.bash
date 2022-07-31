@@ -1,5 +1,5 @@
 function log() {
-    echo "$*" >> ~/Desktop/log
+    echo "$*" >> $HOME/Desktop/log
 }
 
 function trim_string() {

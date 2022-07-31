@@ -6,9 +6,9 @@ Git `add`, `branch`, `commit`, create PR, open browser — in a single command!
 
 ![So quick an easy!](docs/gprq_simple_prompt_commit_message.png)
 
-It even works with a branch!
+Wowwwww what is this [magic](#marker-jira-ticket)???
 
-![It even works with a branch!](docs/gprq_simple_prompt_branch.png)
+![Waaaaaaaaaaaaaaat. Learn more below!](docs/gprq_simple_prompt_jira.png)
 
 `gprq` is great for doing lots of atomic PRs/commits (small PRs with a single
 purpose, so they are easy for people to code review).
@@ -77,7 +77,7 @@ Then do one of the following; *(Just finished a JIRA ticket? See option 2)*:
         - `JIRA-123: Fix the thing - Part 1`
     - The branch name will be a reformatted commit message
 
-1. Use branch/commit name of JIRA ticket - My favourite option!
+1. Use branch/commit name of JIRA ticket - My favourite option! <span id="marker-jira-ticket"></span>
     - Drag-select the `JIRA-123 Fix the thing from the
    website` from your JIRA ticket ![JIRA ticket](./docs/jira_screenshot.png)
         - Tip: It's easiest if drag-select from the right of the title up/left

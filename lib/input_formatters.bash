@@ -80,19 +80,16 @@ function branch_to_commit_message() {
 function reformat_clipboard_to_commit_message() {
     # Usually multiline
     local clipboard="$(< /dev/stdin)"
-    local temp_file=`mktemp`
-    echo "$clipboard" > "$temp_file"
 
-    # TODO is the better option actually to use node due to better libraries like git-open
+    # Python is here as it's way less error-prone than bash, but I haven't
+    # moved the rest of the code to python yet.
     exec_python -c "
 import re
 import sys
 
 JIRA_PREFIX_RE=r'^([A-Z][A-Z]+-[0-9]+):?\\s*?'
 
-temp_file=sys.argv[1]
-with open(temp_file) as f:
-    clipboard = f.read()
+clipboard = sys.argv[1]
 
 lines = [line for line in clipboard.split('\n') if line != '']
 
@@ -104,7 +101,5 @@ joined_lines = ': '.join(lines)
 joined_lines = re.sub(r':+', ':', joined_lines)
 
 print(joined_lines)
-" "$temp_file"
-
-    rm "$temp_file"
+" "$clipboard"
 }

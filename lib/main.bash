@@ -79,7 +79,7 @@ function user_confirm_status_or_add() {
                 break;
                 ;;
             a)
-                f -b '✨✨ I like you! ✨✨'
+                echo '✨✨✨✨'
                 echo '--------------------------------- > git add -p --------------------------------'
                 git add -p
                 ;; # Loop to confirm or add more files
@@ -137,15 +137,6 @@ function open_pull_request_in_browser() {
         local url="$base/pull/`current_branch`"
     fi
 
-    # MacOS specific
-    # If `open` exists. TODO do proper platform check
-    if command -v open &> /dev/null; then
-        open "$url"
-    else
-        echo "'open' could not be found. Open the PR yourself:"
-        echo
-        echo "    $url"
-        echo
-        exit
-    fi
+    # https://docs.python.org/3/library/webbrowser.html
+    exec_python -m webbrowser -t "$url"
 }

@@ -17,6 +17,10 @@ purpose, so they are easy for people to code review).
 
 # Installation
 
+Requires `python3` to be installed. `gprq` will try to find `python3` and if
+that doesn't exist, fall back to `python`. `python2` might work, I haven't
+tried.
+
 ## Bash
 
 ```
@@ -58,9 +62,11 @@ Use the method in the Bash section, but `s/bash/zsh` in the instructions
 
 # Compatibility
 
-Currently only fully supports MacOS (pasting from clipboard and opening the URL
-in the browser will only work on Mac). Otherwise it should :tm: work on any
-Unix OS.
+Currently only fully supports MacOS (pasting from clipboard will only work on Mac).
+Otherwise it should :tm: work on any Unix OS.
+
+Opening in the browser uses the python3 [`webbrowser`
+module](https://docs.python.org/3/library/webbrowser.html).
 
 Works with GitHub and Bitbucket.
 

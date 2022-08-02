@@ -46,17 +46,27 @@ function main() {
     # We've already checked that the branch doesn't exist, so we should commit
     # before creating the branch, as it's more likely to fail for whatever
     # reason.
-    run_with_header git checkout --detach \
-        && run_with_header git commit -m "$message" \
-        && run_with_header git checkout -b "$branch" \
-        && run_with_header git push -u origin "$branch" \
-        && run_with_header open_pull_request_in_browser
+
+    : \
+        && echo "> git checkout --detach" \
+        && git checkout --detach \
+        && echo "> git commit -m <message>" \
+        && git commit -m "$message" \
+        && echo "> git checkout -b <branch>" \
+        && git checkout -b "$branch" \
+        && echo "> git push -u origin <branch>" \
+        && git push -u origin "$branch" \
+        && echo "> git push -u origin <branch>" \
+        && open_pull_request_in_browser
 }
 
 function user_confirm_status_or_add() {
     while true; do
         echo
-        run_with_header git status
+        echo '--------------------------------- > git status --------------------------------'
+        echo
+        git status
+        echo
         echo -------------------------------------------------------------------------------
         echo
 

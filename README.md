@@ -88,7 +88,7 @@ Then do one of the following; *(Just finished a JIRA ticket? See option 2)*:
     - `JIRA-123: Fix the thing - Part 1`
 - The branch name will be a reformatted commit message
 
-## 2. Use JIRA ticket number and title - My favourite option! <span id="marker-jira-ticket"></span>
+## <span id="marker-jira-ticket">2. Use JIRA ticket number and title - My favourite option!</span>
 
 - Drag-select the `JIRA-123 Fix the thing from the
 website` from your JIRA ticket ![JIRA ticket](./docs/jira_screenshot.png)

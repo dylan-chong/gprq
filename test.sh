@@ -63,9 +63,7 @@ test 'commit_message_to_branch "Hello: world stuff with lots of words"' \
 test 'commit_message_to_branch "JIRA-123: Hello world stuff"' \
     == "JIRA-123/hello-world-stuff"
 test 'commit_message_to_branch "JIRA-123 Hello world stuff"' \
-    == "JIRA-123/hello-world-stuff"
-test 'commit_message_to_branch "JIRA-123     Hello world stuff"' \
-    == "JIRA-123/hello-world-stuff" # Required for reformat_clipboard_to_commit_message to work
+    == "jira-123-hello-world-stuff"
 test 'commit_message_to_branch "Testing stuff: Hello world"' \
     == "testing-stuff/hello-world"
 

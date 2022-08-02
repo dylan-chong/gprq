@@ -77,7 +77,7 @@ function user_confirm_status_or_add() {
         echo "  `f -b 'r'` <path>:    run 'git reset <path>'"
         echo "  `f -b 'd'`:           run 'git diff'"
         echo "  `f -b 'D'`:           run 'git diff --staged'"
-        echo "  `f -b 'F'`:           run 'git add -A' (you slimey bugger ;P)"
+        echo "  `f -b 'F'`:           run 'git add -A' (sneaky ;P)"
         echo
         read -p "`f -b '[y/n/a/ap/r/rp/d/F]'`? " CONT
         echo

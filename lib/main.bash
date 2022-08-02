@@ -38,23 +38,25 @@ function main() {
     fi
 
     if git show-ref -q --heads "$branch"; then
-        f -b "Error: Branch '$branch' already exists\n"
-        exit 1
+        exit_with_message "Error: Branch '$branch' already exists";
     fi
 
-    git commit -m "$message" \
-        && git checkout -b "$branch" \
-        && git push -u origin "$branch" \
-        && open_pull_request_in_browser
+    # Detach so we can commit without polluting the current branch.
+    #
+    # We've already checked that the branch doesn't exist, so we should commit
+    # before creating the branch, as it's more likely to fail for whatever
+    # reason.
+    run_with_header git checkout --detach \
+        && run_with_header git commit -m "$message" \
+        && run_with_header git checkout -b "$branch" \
+        && run_with_header git push -u origin "$branch" \
+        && run_with_header open_pull_request_in_browser
 }
 
 function user_confirm_status_or_add() {
     while true; do
         echo
-        echo '--------------------------------- > git status --------------------------------'
-        echo
-        git status
-        echo
+        run_with_header git status
         echo -------------------------------------------------------------------------------
         echo
 

@@ -7,7 +7,7 @@ function main() {
     if [ -z "$1" ]; then
         # Take commit message from clipboard so you can copy the jira ticket number and description straight after it
         # MacOS specific
-        local message=`pbpaste | reformat_clipboard_to_commit_message`
+        local message=`paste_from_clipboard | reformat_clipboard_to_commit_message`
         local branch=`commit_message_to_branch "$message"`
     else
         # Check if argument is branch name or commit message by if it has

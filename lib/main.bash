@@ -61,15 +61,15 @@ function user_confirm_status_or_add() {
         echo "Are you on the `f -b 'right base commit'` *and* does this show the `f -b 'right staged files'`?"
         echo "  `f -b 'y'`es:         continue"
         echo "  `f -b 'n'`o:          cancel"
-        echo "  `f -b 'a'`:           run 'git add -p'"
-        echo "  `f -b 'af'` <path>:   run 'git add <path>'"
-        echo "  `f -b 'r'`:           run 'git reset -p'"
-        echo "  `f -b 'rf'` <path>:   run 'git reset <path>'"
+        echo "  `f -b 'ap'`:          run 'git add -p'"
+        echo "  `f -b 'a'` <path>:    run 'git add <path>'"
+        echo "  `f -b 'rp'`:          run 'git reset -p'"
+        echo "  `f -b 'r'` <path>:    run 'git reset <path>'"
         echo "  `f -b 'd'`:           run 'git diff'"
         echo "  `f -b 'D'`:           run 'git diff --staged'"
         echo "  `f -b 'F'`:           run 'git add -A' (you slimey bugger ;P)"
         echo
-        read -p "`f -b '[y/n/a/af/r/rf/d/F]'`? " CONT
+        read -p "`f -b '[y/n/a/ap/r/rp/d/F]'`? " CONT
         echo
 
         case "$CONT" in
@@ -78,25 +78,25 @@ function user_confirm_status_or_add() {
                 echo
                 break;
                 ;;
-            a)
+            ap)
                 echo '✨✨✨✨'
                 echo '--------------------------------- > git add -p --------------------------------'
                 git add -p
                 ;; # Loop to confirm or add more files
-            af*)
-                local path=`echo $CONT | perl -pe 's/^af\s*//'`
+            a\ *)
+                local path=`echo $CONT | perl -pe 's/^a\s+//'`
                 if [ "$path" == "." ]; then
-                    echo "Unbelievable!"
+                    echo "Sneaky!"
                 fi
                 echo "------------------ > git add ${path} -----------------"
                 git add "$path"
                 ;; # Loop to confirm or add more files
-            r)
+            rp)
                 echo '------------------------------- > git reset -p --------------------------------'
                 git reset -p
                 ;; # Loop to confirm or add more files
-            rf*)
-                local path=`echo $CONT | perl -pe 's/^rf\s*//'`
+            r\ *)
+                local path=`echo $CONT | perl -pe 's/^r\s+//'`
                 echo "----------------- > git reset ${path} ----------------"
                 git reset "$path"
                 ;; # Loop to confirm or add more files
@@ -108,8 +108,7 @@ function user_confirm_status_or_add() {
                 echo '----------------------------- > git diff --staged -----------------------------'
                 git --paginate diff --staged
                 ;; # Loop to confirm or add more files
-            F)
-                echo 'Slimey bugger alert!'
+            F) # to pay respects
                 echo '> git add -A'
                 git add -A
                 ;; # Loop to confirm

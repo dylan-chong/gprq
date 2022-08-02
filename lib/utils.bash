@@ -54,13 +54,3 @@ function exit_with_message {
     printf '%s\n' "$1" >&2 ## Send message to stderr.
     exit "${2-1}" ## Return a code specified by $2, or 1 by default.
 }
-
-# Not all functions are using this yet. TODO use this, but also options for
-# different formatting
-function run_with_header() {
-    local command="$@"
-    echo "------------------------------- > $command ------------------------------"
-    echo
-    $command
-    echo
-}

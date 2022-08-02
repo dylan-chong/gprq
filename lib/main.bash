@@ -46,17 +46,15 @@ function main() {
     # We've already checked that the branch doesn't exist, so we should commit
     # before creating the branch, as it's more likely to fail for whatever
     # reason.
-
     : \
         && echo "> git checkout --detach" \
         && git checkout --detach \
-        && echo "> git commit -m <message>" \
+        && echo "> git commit -m \"$branch\"" \
         && git commit -m "$message" \
-        && echo "> git checkout -b <branch>" \
+        && echo "> git checkout -b \"$branch\"" \
         && git checkout -b "$branch" \
-        && echo "> git push -u origin <branch>" \
+        && echo "> git push -u origin \"$branch\"" \
         && git push -u origin "$branch" \
-        && echo "> git push -u origin <branch>" \
         && open_pull_request_in_browser
 }
 

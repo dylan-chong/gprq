@@ -4,14 +4,6 @@
 function commit_message_to_branch() {
     local commit_message="$1"
 
-    # If has JIRA prefix without the colon. Prefix must be uppercase
-    if [[ "$commit_message" =~ ^[A-Z][A-Z]+-[0-9]+\ + ]]; then
-        # Insert colon after JIRA prefix
-        local commit_message_with_colon=`echo $commit_message | perl -pe 's/(^[A-Z][A-Z]+-[0-9]+)\s+/\1: /'`
-        commit_message_to_branch "$commit_message_with_colon"
-        return
-    fi
-
     # If has prefix
     if [[ "$commit_message" =~ : ]]; then
         local prefix=`echo "$commit_message" | perl -pe 's/:.*//'`

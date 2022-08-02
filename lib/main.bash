@@ -34,7 +34,7 @@ function main() {
 
     if [ "$CONT" != "y" ]; then
         echo "Cancelling";
-        return
+        exit
     fi
 
     if git show-ref -q --heads "$branch"; then

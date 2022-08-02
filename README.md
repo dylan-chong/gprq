@@ -62,8 +62,9 @@ Use the method in the Bash section, but `s/bash/zsh` in the instructions
 
 # Compatibility
 
-Currently only fully supports MacOS (pasting from clipboard will only work on Mac).
-Otherwise it should :tm: work on any Unix OS.
+Currently only fully supports MacOS (pasting from clipboard will work on Mac
+and Linux with X11 (need testers)).
+Excluding this, it should :tm: work on any Unix OS (including WSL).
 
 Opening in the browser uses the python3 [`webbrowser`
 module](https://docs.python.org/3/library/webbrowser.html).

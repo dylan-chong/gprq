@@ -33,9 +33,24 @@ function not_bold() {
 }
 
 function exec_python() {
-    if command -v python &> /dev/null; then
+    if command -v python3 &> /dev/null; then
         /usr/bin/env python3 "$@"
     else
         /usr/bin/env python "$@"
     fi
+}
+
+function paste_from_clipboard() {
+    if command -v pbpaste &> /dev/null; then
+        pbpaste
+    elif command -v pbpaste &> /dev/null; then
+        xclip -selection clipboard -o
+    else
+        exit_with_message 'Clipboard not supported. Please pass a commit message instead'
+    fi
+}
+
+function exit_with_message {
+    printf '%s\n' "$1" >&2 ## Send message to stderr.
+    exit "${2-1}" ## Return a code specified by $2, or 1 by default.
 }

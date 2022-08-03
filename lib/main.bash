@@ -147,5 +147,6 @@ function open_pull_request_in_browser() {
     fi
 
     # https://docs.python.org/3/library/webbrowser.html
+    echo "> python -m webbrowser -t \"$url\""
     exec_python -m webbrowser -t "$url"
 }

@@ -24,16 +24,44 @@ function commit_message_to_branch() {
     else
         local prefix_formatted=''
         local separator=''
-        local suffix=`echo "$commit_message" | perl -pe 's/([A-Z])/\L\1/g'`
+        local suffix=`echo "$commit_message"`
     fi
 
-    # 1. Lowercase
-    # 2. Trim
-    # 3. Replace space with -
-    # 4. Replace multiple dashes with "--"
-    local suffix_formatted=`echo $suffix | perl -pe 's/([A-Z])/\L\1/g' | trim_string_pipe | perl -pe 's/(\s|_)+/-/g' | perl -pe 's/--+/--/g'`
+    local suffix_formatted=`format_commit_message_suffix "$suffix"`
 
     echo "$prefix_formatted$separator$suffix_formatted"
+}
+
+function format_commit_message_suffix() {
+    local unformatted_suffix="$1"
+
+    # Python is here as it's way less error-prone than bash, but I haven't
+    # moved the rest of the code to python yet.
+    exec_python -c "
+import re
+import sys
+
+unformatted_suffix = sys.argv[1]
+
+simplified_suffix = (
+    unformatted_suffix
+    .lower()
+    .strip()
+)
+
+# Split and join later, to allow us to retain '--' in branch names
+segments = re.split(r'\s+-\s+', simplified_suffix)
+
+# Remove unfriendly branch symbols
+formatted_segments = [
+    re.sub(r'[^A-Za-z0-9]+', '-', segment)
+    for segment in segments
+]
+
+formatted_suffix = '--'.join(formatted_segments)
+
+print(formatted_suffix)
+" "$unformatted_suffix"
 }
 
 # Takes branch as first argument

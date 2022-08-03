@@ -56,7 +56,7 @@ test 'commit_message_to_branch "Hello: World__stuff"' \
     == "hello/world-stuff"
 test 'commit_message_to_branch "Hello: world stuff"' \
     == "hello/world-stuff"
-test 'commit_message_to_branch "Hello: world stuff - part 1 - fix things"' \
+test 'commit_message_to_branch "Hello: world stuff - part 1  -  fix things"' \
     == "hello/world-stuff--part-1--fix-things"
 test 'commit_message_to_branch "Hello: world stuff with lots of words"' \
     == "hello/world-stuff-with-lots-of-words"
@@ -66,6 +66,17 @@ test 'commit_message_to_branch "JIRA-123 Hello world stuff"' \
     == "jira-123-hello-world-stuff"
 test 'commit_message_to_branch "Testing stuff: Hello world"' \
     == "testing-stuff/hello-world"
+# Remove extraneous symbols
+test 'commit_message_to_branch '\''hello,world, we do stuff and/or things !@#$ %% ^ &*()_+=-[]\\{}|",./<>?~ lol'\' \
+    == "hello-world-we-do-stuff-and-or-things-lol"
+test 'commit_message_to_branch "hello '\'' world"' \
+    == "hello-world"
+# Remove extra colons
+test 'commit_message_to_branch "hello: this: is: a: test"' \
+    == "hello/this-is-a-test"
+# Current behaviour, TODO do we want to keep this?
+test 'commit_message_to_branch "feat(example cool-domain): make cooler"' \
+    == "feat(example-cool-domain)/make-cooler"
 
 # ************************* Test: branch_to_commit_message *************************
 
@@ -85,6 +96,9 @@ test 'branch_to_commit_message "JIRA-9375017/hello-world-stuff"' \
     == "JIRA-9375017: Hello world stuff"
 test 'branch_to_commit_message "testing-stuff/hello-world"' \
     == "testing stuff: Hello world"
+# Current behaviour, TODO do we want to keep this?
+test 'branch_to_commit_message "feat(example-cool-domain)/make-cooler"' \
+    == "feat(example cool domain): Make cooler"
 
 # ************************* Test: reformat_clipboard_to_commit_message *************************
 

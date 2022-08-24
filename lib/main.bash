@@ -12,7 +12,7 @@ function main() {
     else
         # Check if argument is branch name or commit message by if it has
         # no spaces and a / or _ or - in it
-        if [[ "$*" =~ ^[A-Za-z0-9_-]+[/_-][A-Za-z0-9/_-]+$ ]]; then
+        if [[ "$*" =~ ^[A-Za-z0-9_-]+[/_-][A-Za-z0-9/_-\.]+$ ]]; then
             # Argument was branch name
             local branch=`trim_string "$1"`
             local message=`branch_to_commit_message "$branch"`

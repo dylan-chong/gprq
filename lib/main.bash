@@ -12,7 +12,7 @@ function main() {
     else
         # Check if argument is branch name or commit message by if it has
         # no spaces and a / or _ or - in it
-        if [[ "$*" =~ ^[A-Za-z0-9_-]+[/_-][A-Za-z0-9/_-]+$ ]]; then
+        if [[ "$*" =~ ^[A-Za-z0-9_-]+[/_-][A-Za-z0-9/_-\.]+$ ]]; then
             # Argument was branch name
             local branch=`trim_string "$1"`
             local message=`branch_to_commit_message "$branch"`
@@ -43,9 +43,10 @@ function main() {
 
     # Detach so we can commit without polluting the current branch.
     #
-    # We've already checked that the branch doesn't exist, so we should commit
-    # before creating the branch, as it's more likely to fail for whatever
-    # reason.
+    # We've already checked that the branch doesn't exist so it shouldn't ever
+    # fail (TM). We should commit before creating the branch, as it's more
+    # likely to fail for whatever reason. e.g., if test/lint runs and fails
+    # before commit.
     : \
         && echo "> git checkout --detach" \
         && git checkout --detach \

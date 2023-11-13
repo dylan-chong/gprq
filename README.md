@@ -17,9 +17,10 @@ purpose, so they are easy for people to code review).
 
 # Installation
 
-Requires `python3` to be installed. `gprq` will try to find `python3` and if
-that doesn't exist, fall back to `python`. `python2` might work, I haven't
-tried.
+Requires:
+- `python3` to be installed. `gprq` will try to find `python3` and if that
+  doesn't exist, fall back to `python`. `python2` might work, I haven't tried.
+- `bash` version 4+, (only Mac users have to run `brew install bash`)
 
 ## Bash
 
@@ -120,3 +121,11 @@ website` from your JIRA ticket ![JIRA ticket](./docs/jira_screenshot.png)
 1. Never checkout the main/master branch. Always `git fetch && git checkout origin/HEAD`.
    That way you can never need to worry about pulling from the main branch.
    Even better, I like to alias this to `gcoh` "Git checkout (origin) head"
+
+---
+
+# Development
+
+```
+./test.sh
+```

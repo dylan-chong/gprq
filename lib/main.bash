@@ -27,7 +27,6 @@ function main() {
     read -e -p "Commit message (press ENTER to accept): " -i "$message" edited_message
     echo
 
-    read -p "Look good? `bold`[y/n]`not_bold`? " CONT
     echo
     echo -------------------------------------------------------------------------------
     echo
@@ -145,7 +144,7 @@ function open_pull_request_in_browser() {
         local url="$base/pull-requests/new"
     elif [[ "$base" == 'https://gitlab.com/'* ]]; then
         # TODO fix encoded space at the end of the branch
-        local url="$base/-/merge_requests/new?merge_request%5Bsource_branch%5D=`current_branch | jq -sRr '@uri'`"
+        local url="$base/-/merge_requests/new?merge_request%5Bsource_branch%5D=`current_branch | jq -sRr '@uri' | trim_string`"
     else
         local url="$base/pull/`current_branch`"
     fi

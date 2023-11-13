@@ -12,7 +12,7 @@ function main() {
     else
         # Check if argument is branch name or commit message by if it has
         # no spaces and a / or _ or - in it
-        if [[ "$*" =~ ^[A-Za-z0-9_-]+[/_-][A-Za-z0-9/_-\.]+$ ]]; then
+        if [[ "$*" =~ ^[A-Za-z0-9_-]+[/_-][A-Za-z0-9/_\.-]+$ ]]; then
             # Argument was branch name
             local branch=`trim_string "$1"`
             local message=`branch_to_commit_message "$branch"`
@@ -23,8 +23,8 @@ function main() {
         fi
     fi
 
-    echo "    New Branch: `bold`$branch`not_bold`"
-    echo "Commit message: `bold`$message`not_bold`"
+    read -e -p "New Branch (press ENTER to accept): " -i "$branch" edited_branch
+    read -e -p "Commit message (press ENTER to accept): " -i "$message" edited_message
     echo
 
     read -p "Look good? `bold`[y/n]`not_bold`? " CONT
@@ -38,7 +38,7 @@ function main() {
     fi
 
     if git show-ref -q --heads "$branch"; then
-        exit_with_message "Error: Branch '$branch' already exists";
+        exit_with_message "Error: Branch '$edited_branch' already exists";
     fi
 
     # Detach so we can commit without polluting the current branch.
@@ -50,12 +50,12 @@ function main() {
     : \
         && echo "> git checkout --detach" \
         && git checkout --detach \
-        && echo "> git commit -m \"$branch\"" \
-        && git commit -m "$message" \
-        && echo "> git checkout -b \"$branch\"" \
-        && git checkout -b "$branch" \
-        && echo "> git push -u origin \"$branch\"" \
-        && git push -u origin "$branch" \
+        && echo "> git commit -m \"$edited_branch\"" \
+        && git commit -m "$edited_message" \
+        && echo "> git checkout -b \"$edited_branch\"" \
+        && git checkout -b "$edited_branch" \
+        && echo "> git push -u origin \"$edited_branch\"" \
+        && git push -u origin "$edited_branch" \
         && open_pull_request_in_browser
 }
 
@@ -143,6 +143,9 @@ function open_pull_request_in_browser() {
     local base=`git remote get-url origin | perl -pe 's/\.git$//' | perl -pe 's/git\@([^:]+):/https:\/\/\1\//'`
     if [[ $base == 'https://bitbucket.org'* ]]; then
         local url="$base/pull-requests/new"
+    elif [[ "$base" == 'https://gitlab.com/'* ]]; then
+        # TODO fix encoded space at the end of the branch
+        local url="$base/-/merge_requests/new?merge_request%5Bsource_branch%5D=`current_branch | jq -sRr '@uri'`"
     else
         local url="$base/pull/`current_branch`"
     fi

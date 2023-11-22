@@ -143,8 +143,7 @@ function open_pull_request_in_browser() {
     if [[ $base == 'https://bitbucket.org'* ]]; then
         local url="$base/pull-requests/new"
     elif [[ "$base" == 'https://gitlab.com/'* ]]; then
-        # TODO fix encoded space at the end of the branch
-        local url="$base/-/merge_requests/new?merge_request%5Bsource_branch%5D=`current_branch | jq -sRr '@uri' | trim_string`"
+        local url="$base/-/merge_requests/new?merge_request%5Bsource_branch%5D=`current_branch | trim_string_pipe | jq -sRr '@uri'`"
     else
         local url="$base/pull/`current_branch`"
     fi

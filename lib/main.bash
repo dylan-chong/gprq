@@ -144,8 +144,10 @@ function open_pull_request_in_browser() {
         local url="$base/pull-requests/new"
     elif [[ "$base" == 'https://gitlab.com/'* ]]; then
         local url="$base/-/merge_requests/new?merge_request%5Bsource_branch%5D=`current_branch | trim_string_pipe | jq -sRr '@uri'`"
-    else
+    elif [[ "$base" == 'https://'*gitlab* ]]; then
         local url="$base/pull/`current_branch`"
+    else
+        echo "Unknown domain for url: $base"
     fi
 
     # https://docs.python.org/3/library/webbrowser.html

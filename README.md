@@ -8,7 +8,7 @@ Git `add`, `branch`, `commit`, `push`, create PR, open browser — in a single c
 
 Wowwwww what is this [magic](#marker-jira-ticket)???
 
-![Waaaaaaaaaaaaaaat. Learn more below!](docs/gprq_simple_prompt_jira.png)
+![Waaaaaaaaaaaaaat. Learn more below!](docs/gprq_simple_prompt_jira.png)
 
 `gprq` is great for doing lots of atomic PRs/commits (small PRs with a single
 purpose, so they are easy for people to code review).

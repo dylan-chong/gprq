@@ -23,13 +23,21 @@ function main() {
         fi
     fi
 
-    read -e -p "New Branch (press ENTER to accept): " -i "$branch" edited_branch
-    read -e -p "Commit message (press ENTER to accept): " -i "$message" edited_message
-    echo
+    tmpfile=$(mktemp /tmp/variables.XXXXXX)
+    echo "branch: $branch" > "$tmpfile"
+    echo "message: $message" >> "$tmpfile"
 
-    echo
-    echo -------------------------------------------------------------------------------
-    echo
+    ${EDITOR:-nano} "$tmpfile"
+
+    # Load the new values from the file
+    while IFS=: read -r name value; do
+      if [ "$name" = "branch" ]; then
+        edited_branch=$(echo "$value" | xargs)
+      elif [ "$name" = "message" ]; then
+        edited_message=$(echo "$value" | xargs)
+      fi
+    done < "$tmpfile"
+    rm "$tmpfile"
 
     if [ "$CONT" != "y" ]; then
         echo "Cancelling";

@@ -62,8 +62,9 @@ function main() {
         && echo "> git checkout -b \"$edited_branch\"" \
         && git checkout -b "$edited_branch" \
         && echo "> git push -u origin \"$edited_branch\"" \
-        && git push -u origin "$edited_branch" \
-        && open_pull_request_in_browser
+        && push_output=$(git push -u origin "$edited_branch" 2>&1) \
+        && echo "$push_output" \
+        && extract_and_open_pull_request "$push_output"
 }
 
 function user_confirm_status_or_add() {
@@ -142,23 +143,36 @@ function user_confirm_status_or_add() {
     done
 }
 
-function open_pull_request_in_browser() {
-    # Goes to the URL for creating a new pull request in the browser. For
-    # GitHub, the branch is selected automatically, and if the pull request
-    # already exists for that branch, GitHub will redirect to the existing pull
-    # request. For Bitbucket, the new pull request page is opened.
-    local base=`git remote get-url origin | perl -pe 's/\.git$//' | perl -pe 's/git\@([^:]+):/https:\/\/\1\//'`
-    if [[ $base == 'https://bitbucket.org'* ]]; then
-        local url="$base/pull-requests/new"
-    elif [[ "$base" == 'https://gitlab.com/'* ]]; then
-        local url="$base/-/merge_requests/new?merge_request%5Bsource_branch%5D=`current_branch | trim_string_pipe | jq -sRr '@uri'`"
-    elif [[ "$base" == 'https://'*gitlab* ]]; then
-        local url="$base/pull/`current_branch`"
-    else
-        echo "Unknown domain for url: $base"
+function extract_and_open_pull_request() {
+    local push_output="$1"
+    
+    # Extract pull request URL from git push output
+    # Try different patterns that various git hosting services might use
+    
+    # GitHub pattern: "Create a pull request for 'branch' on GitHub by visiting:"
+    local url=$(echo "$push_output" | grep -A1 "Create a pull request.*by visiting:" | grep -o 'https://[^[:space:]]*' | head -1)
+    
+    # If not found, try other common patterns
+    if [ -z "$url" ]; then
+        # GitLab pattern: "Create a merge request for 'branch' by visiting:"
+        url=$(echo "$push_output" | grep -A1 "Create a merge request.*by visiting:" | grep -o 'https://[^[:space:]]*' | head -1)
     fi
-
-    # https://docs.python.org/3/library/webbrowser.html
-    echo "> python -m webbrowser -t \"$url\""
-    exec_python -m webbrowser -t "$url"
+    
+    if [ -z "$url" ]; then
+        # Bitbucket pattern: "Create a pull request for 'branch' by visiting:"
+        url=$(echo "$push_output" | grep -A1 "Create a pull request.*by visiting:" | grep -o 'https://[^[:space:]]*' | head -1)
+    fi
+    
+    if [ -z "$url" ]; then
+        # Generic pattern: look for any URL after "by visiting:"
+        url=$(echo "$push_output" | grep -A1 "by visiting:" | grep -o 'https://[^[:space:]]*' | head -1)
+    fi
+    
+    if [ -n "$url" ]; then
+        echo "> python -m webbrowser -t \"$url\""
+        exec_python -m webbrowser -t "$url"
+        return
+    fi
+    
+    echo "Could not extract pull request URL from git push output, falling back to generated URL"
 }
